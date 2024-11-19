@@ -22,7 +22,7 @@ class CourseViewSet(viewsets.ModelViewSet):
             self.permission_classes = (IsModer | IsOwner, )
         elif self.action == "destroy":
             self.permission_classes = (~IsModer | IsOwner,)
-        return super.get_permissions()
+        return super().get_permissions()
 
 
 class LessonCreateAPIView(generics.CreateAPIView):

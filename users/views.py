@@ -7,7 +7,6 @@ from users.models import Payment, User
 from users.serializers import PaymentSerializer, UserSerializer
 
 
-
 class PaymentViewSet(viewsets.ModelViewSet):
     """позволяет автоматически реализовать стандартные методы CRUD для модели Payment"""
 
@@ -28,7 +27,6 @@ class UserCreateAPIView(CreateAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
     pagination_classes = (AllowAny,)
-
 
     def perform_create(self, serializer):
         user = serializer.save(is_active=True)

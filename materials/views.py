@@ -15,12 +15,21 @@ class CourseViewSet(viewsets.ModelViewSet):
     pagination_class = MaterialsPaginator
 
     def get_serializer_class(self):
-
+        """Определяем, какой сериализатор использовать в зависимости от действия."""
         if self.action == "retrieve":
             return CourseDetailSerializer
         return CourseSerializer
 
+    def perform_create(self, serializer):
+        """Этот метод срабатывает, когда пользователь создает новый курс через API."""
+
+        course = serializer.save()
+        course.owner = self.request.user
+        course.save()
+
     def get_permissions(self):
+        """метод для проверки является ли пользов.(модератором, собственником, просто пользов.),
+                и в зависимости от этого разрешаем или нет, те или иные действия"""
         if self.action in ["create", "destroy"]:
             self.permission_classes = (~IsModer,)
         elif self.action in ["update", "retrieve"]:
@@ -66,8 +75,7 @@ class LessonDestroyAPIView(generics.DestroyAPIView):
 
 
 class SubscriptionView(APIView):
-
-
+    """Класс для проверки подписан ли пользователь на курс или нет"""
     def post(self, request, course_id, *args, **kwargs):
         user = request.user  # Получаем текущего пользователя
 
